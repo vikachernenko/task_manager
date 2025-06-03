@@ -1,0 +1,57 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Задачи для {{ criteria.title }}{% endblock %}
+
+{% block content %}
+<div class="text-center my-5">
+    <h1 class="display-4">Задачи для {{ criteria.title }}</h1>
+    <p class="lead">Управляйте своими задачами</p>
+</div>
+
+<div class="container my-5">
+    <div class="row g-4">
+        <!-- Кнопка создания -->
+        <div class="col-12 animate__animated animate__fadeIn">
+            <div class="welcome-card tasks-bg h-100">
+                <div class="card-body">
+                    <h2 class="card-title"><i class="fas fa-plus me-2"></i>Создать задачу</h2>
+                    <a href="{% url 'task_create' criteria.id %}" class="btn btn-light">Создать</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Список задач -->
+        {% for task in tasks %}
+        <div class="col-md-4 animate__animated animate__fadeIn" 
+             style="--animate-delay: {{ forloop.counter|divisibleby:3|yesno:'0.2s,0.4s,0.6s' }}">
+            <div class="welcome-card tasks-bg h-100">
+                <div class="card-body">
+                    <h2 class="card-title">{{ task.title }}</h2>
+                    <p class="card-text">
+                        Дедлайн: {{ task.deadline|date:"d.m.Y H:i"|default:"Нет" }}<br>
+                        Приоритет: {{ task.get_priority_display }}
+                    </p>
+                    <div class="btn-group">
+                        <a href="{% url 'task_update' task.id %}" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-outline-light" 
+                           onclick="return confirm('Удалить задачу?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 animate__animated animate__fadeIn">
+            <div class="welcome-card tasks-bg h-100">
+                <div class="card-body">
+                    <h2 class="card-title">Задачи отсутствуют</h2>
+                    <p class="card-text">Создайте свою первую задачу</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'tasks/base.html' %}
+{% load static %}
+{% block title %}Список категорий{% endblock %}
+
+{% block content %}
+<div class="text-center my-5">
+    <h1 class="display-4">Список категорий</h1>
+    <p class="lead">Управляйте своими категориями</p>
+</div>
+<div class="list-group mb-4">
+    {% for criteria in criteria %}
+        
+    {% endfor %}
+</div>
+<div class="container my-5">
+    <div class="row g-4">
+        <!-- Кнопка создания -->
+        <div class="col-12 animate__animated animate__fadeIn">
+            <div class="welcome-card criteria-bg h-100">
+                <div class="card-body">
+                    <h2 class="card-title"><i class="fas fa-plus me-2"></i>Создать категорию</h2>
+                    <a href="{% url 'criteria_create' %}" class="btn btn-light">Создать</a>
+                </div>
+            </div>
+        </div>
+        {% for criteria in criteria %}
+        <div class="criteria-item">
+            <div class="list-group-item">
+                {% if criteria.title == 'учеба' %}
+                    📚 
+                {% elif criteria.title == 'дом' %}
+                    🏠 
+                {% elif criteria.title == 'спорт' %}
+                    🏋️ 
+                {% else %}
+                    📌 
+                {% endif %}
+                <strong>{{ criteria.title }}</strong>
+            </div>
+        <!-- Другие поля категории -->
+
+            {% if not criteria.task_set.all %}
+                <a href="{% url 'criteria_delete' criteria.id %}" class="btn btn-danger">Удалить категорию</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+        <!-- Список категорий -->
+        {% for criterion in criteria %}
+        <div class="col-md-4 animate__animated animate__fadeIn" 
+             style="--animate-delay: {{ forloop.counter|divisibleby:3|yesno:'0.2s,0.4s,0.6s' }}">
+            <div class="welcome-card criteria-bg h-100">
+                <div class="card-body">
+                    <h2 class="card-title">{{ criterion.title }}</h2>
+                    <p class="card-text">
+                        Статус: {{ criterion.get_status_display }}<br>
+                        Приоритет: {{ criterion.get_priority_display }}
+                    </p>
+                    <a href="{% url 'task_list' criterion.id %}" class="btn btn-light">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 animate__animated animate__fadeIn">
+            <div class="welcome-card criteria-bg h-100">
+                <div class="card-body">
+                    <h2 class="card-title">Категории отсутствуют</h2>
+                    <p class="card-text">Создайте свою первую категорию</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

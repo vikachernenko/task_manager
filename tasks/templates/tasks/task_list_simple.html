@@ -1,0 +1,80 @@
+{% extends 'tasks/base.html' %}
+{% load static %}
+{% block title %}Список всех задач{% endblock %}
+{% block content %}
+    <div class="text-center mt-5">
+        <h1 class="display-4">Список всех задач</h1>
+        <p class="lead mt-3">Наведите на задачу, чтобы увидеть описание.</p>
+    </div>
+    <div class="container mt-5">
+        <div class="row g-4">
+            {% for task in tasks %}
+                <div class="col-md-4">
+                    <div class="card h-100 welcome-card tasks-bg animate__animated animate__fadeIn task-card" style="--animate-delay: {{ forloop.counter|floatformat:1|add:'-0.8' }}s;">
+                        <div class="card-body text-dark text-center" style="color: #000000 !important;">
+                            <h2 class="card-title">{{ task.title }}</h2>
+                            <div class="task-description">
+                                {{ task.description|default:"Описание отсутствует" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="card h-100 welcome-card tasks-bg animate__animated animate__fadeIn">
+                        <div class="card-body text-dark text-center" style="color: #000000 !important;">
+                            <h2 class="card-title">Задачи отсутствуют</h2>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .task-card {
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .task-card:hover {
+            transform: scale(1.05); /* Увеличение при наведении */
+        }
+        .task-description {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f8f9fa; /* Светлый фон для описания */
+            color: #000000; /* Чёрный текст для описания */
+            padding: 10px;
+            border-radius: 5px;
+            width: 80%;
+            z-index: 10;
+            font-size: 0.9rem;
+            border: 1px solid #ddd; /* Добавим границу для лучшей видимости */
+        }
+        .task-card:hover .task-description {
+            display: block;
+            animation: fadeIn 0.3s ease;
+            animation-delay: 0.5s; /* Задержка появления описания */
+            animation-fill-mode: forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Переопределение стилей для текущего шаблона */
+        .tasks-bg {
+            background-color: #f8f9fa; /* Светлый фон по умолчанию */
+            color: #000000 !important; /* Чёрный текст */
+        }
+        .welcome-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .welcome-card .card-body {
+            color: #000000 !important; /* Принудительно чёрный текст */
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'tasks/base.html' %}
+{% load static %}
+{% block content %}
+<div class="text-center my-5">
+    <h1 class="display-4 animate__animated animate__fadeIn">Добро пожаловать в менеджер задач!</h1>
+    <p class="lead mt-3 animate__animated animate__fadeIn animate__delay-1s">Организуйте свои задачи и проекты с легкостью</p>
+</div>
+
+<div class="container-fluid px-0">  <!-- Убираем padding у container-fluid -->
+    <div class="row g-0">  <!-- Убираем gutter между колонками -->
+        <!-- Левая колонка с фотографиями прижатыми к краю -->
+        <div class="col-md-6">
+            <div class="d-flex flex-column h-100">
+                <img src="{% static 'images/7.png' %}" alt="Лопата" class="img-fluid" style="height: 120vh; width: 100%; object-fit: cover; border-radius: 0;">
+            
+            </div>
+        </div>
+
+        <!-- Правая колонка с контентом -->
+        <div class="col-md-6 px-4">  <!-- Добавляем padding только справа -->
+            <!-- Категории -->
+            <div class="welcome-card criteria-bg mb-5 animate__animated animate__fadeInUp" style="--animate-delay: 0.2s; height: 20vh;">
+                <div class="card-body">
+                    <h2 class="card-title"><i class="fas fa-list me-2"></i>Категории</h2>
+                    <p class="card-text">Управляйте своими категориями и проектами</p>
+                    <a href="{% url 'criteria_list' %}" class="btn btn-light">Перейти</a>
+                </div>
+            </div>
+
+            <!-- Задачи -->
+            <div class="welcome-card tasks-bg mb-5 animate__animated animate__fadeInUp" style="--animate-delay: 0.4s; height: 20vh;">
+                <div class="card-body">
+                    <h2 class="card-title"><i class="fas fa-tasks me-2"></i>Задачи</h2>
+                    <p class="card-text">Создавайте и отслеживайте свои задачи</p>
+                    <a href="{% if first_criteria_id %}{% url 'task_list' first_criteria_id %}{% else %}{% url 'criteria_list' %}{% endif %}" 
+                       class="btn btn-light">
+                        Перейти
+                    </a>
+                </div>
+            </div>
+
+            <!-- Уведомления -->
+            <div class="welcome-card notifications-bg mb-5 animate__animated animate__fadeInUp" style="--animate-delay: 0.6s; height: 20vh;">
+                <div class="card-body">
+                    <h2 class="card-title"><i class="fas fa-bell me-2"></i>Уведомления</h2>
+                    <p class="card-text">Следите за срочными задачами</p>
+                    <a href="{% url 'notifications' %}" class="btn btn-light">Перейти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Бегущая строка -->
+<div class="marquee-wrapper py-3 bg-light">
+    <div class="marquee">
+        <div class="marquee-inner">
+            <span class="marquee-item">🧠 Управляй</span>
+            <span class="marquee-item">📔 Достигай</span>
+            <span class="marquee-item">🎀 Планируй</span>
+            <span class="marquee-item">🧠 Управляй</span>
+            <span class="marquee-item">📔 Достигай</span>
+            <span class="marquee-item">🎀 Планируй</span>
+            <span class="marquee-item">🧠 Управляй</span>
+            <span class="marquee-item">📔 Достигай</span>
+            <span class="marquee-item">🎀 Планируй</span>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Стили для бегущей строки */
+    .marquee-wrapper {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        z-index: 1000;
+        border-top: 1px solid #e6dada;
+    }
+    
+    .marquee {
+        display: flex;
+        width: fit-content;
+    }
+    
+    .marquee-inner {
+        display: flex;
+        animation: marquee 20s linear infinite;
+    }
+    
+    .marquee-item {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #6a4420;
+        margin: 0 2rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* Дополнительные стили для прижатых фотографий */
+    body {
+        overflow-x: hidden; /* Скрываем горизонтальный скролл */
+    }
+    
+    .container-fluid.px-0 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .col-md-6:first-child {
+        padding-left: 0;
+    }
+    
+    .col-md-6 img {
+        border-radius: 0 !important;
+    }
+</style>
+
+{% endblock %}

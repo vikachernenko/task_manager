@@ -1,0 +1,61 @@
+{% extends 'tasks/base.html' %}
+{% load date_filters %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Задачи на 10 дней с {{ current_date|date:"d.m.Y" }}</h2>
+    
+    <div class="d-flex justify-content-between mb-4">
+        <a href="?day={{ day_offset|add:-10 }}" class="btn btn-outline-primary">
+            ← На 10 дней назад
+        </a>
+        {% if current_date != today %}
+            <a href="?day=0" class="btn btn-outline-secondary">
+                Сегодня ({{ today|date:"d.m.Y" }})
+            </a>
+        {% endif %}
+        <a href="?day={{ day_offset|add:10 }}" class="btn btn-outline-primary">
+            На 10 дней вперед →
+        </a>
+    </div>
+
+    {% for day in days %}
+        <div class="card mb-3 {% if day.date == today %}border-primary{% endif %}">
+            <div class="card-header {% if day.date == today %}bg-primary text-white{% endif %}">
+                <h5 class="mb-0">
+                    {{ day.date|date:"l, d.m.Y" }}
+                    <span class="badge bg-secondary float-end">
+                        {{ day.tasks|length }} задач
+                    </span>
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if day.tasks %}
+                    <div class="list-group">
+                        {% for task in day.tasks %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1">{{ task.title }}</h6>
+                                    <small class="text-muted">
+                                        {{ task.deadline|time }} | 
+                                        <span class="badge bg-{% if task.priority == 'high' %}danger{% elif task.priority == 'medium' %}warning{% else %}success{% endif %}">
+                                            {{ task.get_priority_display }}
+                                        </span>
+                                    </small>
+                                </div>
+                                {% if task.description %}
+                                    <p class="mb-1 small">{{ task.description|truncatechars:100 }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-light mb-0">
+                        Нет задач на этот день
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

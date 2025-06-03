@@ -1,0 +1,32 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Уведомления{% endblock %}
+{% block content %}
+    <div class="text-center mt-5">
+        <h1 class="display-4">Уведомления</h1>
+        <p class="lead mt-3">Следите за срочными задачами (менее 24 часов).</p>
+    </div>
+    <div class="container mt-5">
+        <div class="row g-4">
+            {% if urgent_tasks %}
+                {% for task in urgent_tasks %}
+                    <div class="col-md-4">
+                        <div class="card h-100 welcome-card notifications-bg animate__animated animate__fadeIn" style="--animate-delay: {{ forloop.counter|floatformat:1|add:'-0.8' }}s;">
+                            <div class="card-body text-white text-center">
+                                <h2 class="card-title">{{ task.title }}</h2>
+                                <p class="card-text">Дедлайн: {{ task.deadline|date:"d.m.Y H:i" }} (осталось {{ task.deadline|timeuntil }})</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="card h-100 welcome-card notifications-bg animate__animated animate__fadeIn">
+                        <div class="card-body text-white text-center">
+                            <h2 class="card-title">Нет срочных задач</h2>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
